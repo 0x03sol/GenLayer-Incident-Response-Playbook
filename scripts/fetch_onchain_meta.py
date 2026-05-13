@@ -1,0 +1,182 @@
+"""Fetch GenLayer-native metadata for every tx referenced by the docs site.
+
+For each of the 16 tx hashes (8 failed + 8 success) declared in
+`site/src/data/modules.ts`, this script asks the Bradbury RPC for the live
+transaction and extracts the fields the landing page renders inline:
+
+    status_name             e.g. FINALIZED, ACCEPTED
+    result_name             e.g. AGREE, DISAGREE
+    exec_result             e.g. FINISHED_WITH_RETURN, FINISHED_WITH_ERROR
+    leader_short            last_leader truncated to "0x4f...6e"
+    validators              num_of_initial_validators
+    created_timestamp       unix seconds (kept raw so the UI can render "Xd ago")
+
+Writes a typed TS module to:
+    site/src/data/onchain_meta.ts
+
+The TS module is committed to the repo so the docs site stays a pure static
+build -- no client-side RPC calls, no network at runtime.
+
+Run:  python scripts/fetch_onchain_meta.py
+"""
+from __future__ import annotations
+
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+MODULES_TS = ROOT / "site" / "src" / "data" / "modules.ts"
+OUT_TS = ROOT / "site" / "src" / "data" / "onchain_meta.ts"
+
+
+def short_addr(addr: str) -> str:
+    if not addr or not addr.startswith("0x") or len(addr) < 10:
+        return addr or ""
+    return f"{addr[:6]}\u2026{addr[-4:]}"
+
+
+def extract_tx_hashes() -> list[tuple[int, str, str]]:
+    """Return [(module_id, kind, tx_hash)] from modules.ts."""
+    text = MODULES_TS.read_text(encoding="utf-8")
+    blocks = re.split(r"(?=\bid:\s*\d+\s*,)", text)
+    out: list[tuple[int, str, str]] = []
+    for blk in blocks:
+        mo = re.match(r"\s*id:\s*(\d+)", blk)
+        if not mo:
+            continue
+        mid = int(mo.group(1))
+        for kind, field in (("failed", "failedTxHash"), ("success", "successTxHash")):
+            mo2 = re.search(rf'{field}:\s*"([^"]+)"', blk)
+            if mo2:
+                out.append((mid, kind, mo2.group(1)))
+    return out
+
+
+def main() -> int:
+    from genlayer_py import create_client, create_account
+    from genlayer_py.chains import testnet_bradbury
+
+    client = create_client(chain=testnet_bradbury, account=create_account())
+
+    hashes = extract_tx_hashes()
+    print(f"resolving {len(hashes)} tx hashes against Bradbury RPC...")
+
+    records: list[dict] = []
+    for mid, kind, tx_hash in hashes:
+        try:
+            tx = client.get_transaction(transaction_hash=tx_hash)
+        except Exception as e:
+            print(f"  FAIL  module {mid} {kind:7}  {tx_hash}  {e}")
+            return 1
+
+        status = str(tx.get("status_name") or "")
+        result = str(tx.get("result_name") or "")
+        exec_r = str(tx.get("tx_execution_result_name") or "")
+        leader = str(tx.get("last_leader") or "")
+        validators_raw = tx.get("num_of_initial_validators")
+        try:
+            validators = int(validators_raw) if validators_raw is not None else 0
+        except (TypeError, ValueError):
+            validators = 0
+        try:
+            ts = int(tx.get("created_timestamp") or 0)
+        except (TypeError, ValueError):
+            ts = 0
+
+        rec = {
+            "module": mid,
+            "kind": kind,
+            "tx_hash": tx_hash,
+            "status_name": status,
+            "result_name": result,
+            "exec_result": exec_r,
+            "leader_address": leader,
+            "leader_short": short_addr(leader),
+            "validators": validators,
+            "created_timestamp": ts,
+        }
+        records.append(rec)
+        print(f"  OK    module {mid} {kind:7}  {status}/{result}/{exec_r}  leader={rec['leader_short']}  v={validators}")
+
+    # Emit TypeScript module.
+    # Detect duplicate tx hashes BEFORE building the dict so a typo or
+    # copy-paste in modules.ts cannot silently drop a record.
+    seen: dict[str, dict] = {}
+    duplicates: list[tuple[str, dict, dict]] = []
+    for r in records:
+        h = r["tx_hash"]
+        if h in seen:
+            duplicates.append((h, seen[h], r))
+        else:
+            seen[h] = r
+    if duplicates:
+        print(
+            f"\n  ! WARNING: {len(duplicates)} duplicate tx_hash(es) found in modules.ts.\n"
+            "    The same hash should not appear in two slots; later record wins:",
+            file=sys.stderr,
+        )
+        for h, first, second in duplicates:
+            print(
+                f"    - {h}\n"
+                f"        kept    : module {first['module']:>2} [{first['kind']}]\n"
+                f"        dropped : module {second['module']:>2} [{second['kind']}]",
+                file=sys.stderr,
+            )
+        print(
+            "    Fix the duplicate in site/src/data/modules.ts before shipping.\n",
+            file=sys.stderr,
+        )
+    by_hash = {r["tx_hash"]: r for r in records}
+    lines: list[str] = []
+    lines.append("// AUTO-GENERATED by scripts/fetch_onchain_meta.py")
+    lines.append("// Do not edit by hand -- rerun the script after redeploying or retriggering calls.")
+    lines.append("")
+    lines.append("export interface OnchainMeta {")
+    lines.append("  module: number;")
+    lines.append('  kind: "failed" | "success";')
+    lines.append("  txHash: string;")
+    lines.append("  statusName: string;")
+    lines.append("  resultName: string;")
+    lines.append("  execResult: string;")
+    lines.append("  leaderAddress: string;")
+    lines.append("  leaderShort: string;")
+    lines.append("  validators: number;")
+    lines.append("  createdTimestamp: number;")
+    lines.append("}")
+    lines.append("")
+    lines.append("export const onchainMeta: Record<string, OnchainMeta> = {")
+
+    def js(s: str) -> str:
+        # json.dumps emits a valid JS/TS string literal: handles quotes,
+        # backslashes, control chars, non-ASCII. Safer than raw f-strings.
+        return json.dumps(s, ensure_ascii=False)
+
+    for h, r in by_hash.items():
+        lines.append(f"  {js(h)}: {{")
+        lines.append(f'    module: {int(r["module"])},')
+        lines.append(f'    kind: {js(r["kind"])},')
+        lines.append(f'    txHash: {js(r["tx_hash"])},')
+        lines.append(f'    statusName: {js(r["status_name"])},')
+        lines.append(f'    resultName: {js(r["result_name"])},')
+        lines.append(f'    execResult: {js(r["exec_result"])},')
+        lines.append(f'    leaderAddress: {js(r["leader_address"])},')
+        lines.append(f'    leaderShort: {js(r["leader_short"])},')
+        lines.append(f'    validators: {int(r["validators"])},')
+        lines.append(f'    createdTimestamp: {int(r["created_timestamp"])},')
+        lines.append("  },")
+    lines.append("};")
+    lines.append("")
+    OUT_TS.write_text("\n".join(lines), encoding="utf-8")
+    print(f"\nwrote {len(by_hash)} entries to {OUT_TS.relative_to(ROOT)}")
+
+    # Also drop a sidecar JSON for any future tooling.
+    sidecar = ROOT / "deployments" / "bradbury_onchain_meta.json"
+    sidecar.write_text(json.dumps(records, indent=2), encoding="utf-8")
+    print(f"wrote sidecar to {sidecar.relative_to(ROOT)}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
