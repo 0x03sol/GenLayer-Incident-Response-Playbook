@@ -1,0 +1,178 @@
+[
+  {
+    "module": 1,
+    "kind": "patched",
+    "file": "ResilientOracle.py",
+    "tx_hash": "0xf2a3dd1dc413b83bed324aaa227b67b817d95bb2d444cfb04c7f3b57a10d8ecd",
+    "address": "0x32407eD485621da6aa91F267aF48CB0E2077B4dC",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0xf2a3dd1dc413b83bed324aaa227b67b817d95bb2d444cfb04c7f3b57a10d8ecd",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x32407eD485621da6aa91F267aF48CB0E2077B4dC",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:03:40Z"
+  },
+  {
+    "module": 1,
+    "kind": "vulnerable",
+    "file": "VulnerableOracle.py",
+    "tx_hash": "0xf6cb9e90a3786f5dbd0755c609bfb63cd2a9682cfa1a849d5a93c8388c130c16",
+    "address": "0x5c1E2b68bb76947c3c602e5Ec51F447cd7f7f7b2",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0xf6cb9e90a3786f5dbd0755c609bfb63cd2a9682cfa1a849d5a93c8388c130c16",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x5c1E2b68bb76947c3c602e5Ec51F447cd7f7f7b2",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:03:25Z"
+  },
+  {
+    "module": 2,
+    "kind": "patched",
+    "file": "HardenedChat.py",
+    "tx_hash": "0x8d626b686bb917d0ee3662b59e6330b88469c0ad00ab49a3ec17022f3f176d8a",
+    "address": "0x4C46f33CB23A5e29715E2c52B480394a22Dcd941",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x8d626b686bb917d0ee3662b59e6330b88469c0ad00ab49a3ec17022f3f176d8a",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x4C46f33CB23A5e29715E2c52B480394a22Dcd941",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:16:23Z"
+  },
+  {
+    "module": 2,
+    "kind": "vulnerable",
+    "file": "VulnerableChat.py",
+    "tx_hash": "0x430523ccc0b42ab2a4be20182547bc85a1c54358ad325f2289f607de4f31a73c",
+    "address": "0x0F7efb7ec097001e032C10E7b9B679ac8317fD66",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x430523ccc0b42ab2a4be20182547bc85a1c54358ad325f2289f607de4f31a73c",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x0F7efb7ec097001e032C10E7b9B679ac8317fD66",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T15:31:04Z"
+  },
+  {
+    "module": 3,
+    "kind": "patched",
+    "file": "SafeAPI.py",
+    "tx_hash": "0xb5a226439a422e50d4692507c00dc994830146a8aa35d14408822340f4c3d05e",
+    "address": "0x2E8270d6D32e305328396f12fe128Fa79B95f908",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0xb5a226439a422e50d4692507c00dc994830146a8aa35d14408822340f4c3d05e",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x2E8270d6D32e305328396f12fe128Fa79B95f908",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:16:41Z"
+  },
+  {
+    "module": 3,
+    "kind": "vulnerable",
+    "file": "VulnerableAPI.py",
+    "tx_hash": "0x218aaff84b3b5e5ac47ed7c5ccc7df95868283efbc03c17eed4551ad8438b336",
+    "address": "0xC4872e8d7094246fa034283b4639c643Be554D18",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x218aaff84b3b5e5ac47ed7c5ccc7df95868283efbc03c17eed4551ad8438b336",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0xC4872e8d7094246fa034283b4639c643Be554D18",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:03:57Z"
+  },
+  {
+    "module": 4,
+    "kind": "patched",
+    "file": "TolerantPrice.py",
+    "tx_hash": "0x4302b99057ec2e9dc029884a2bd1ab8abe4963534a70c9118aae8c25e656cc9b",
+    "address": "0x4Cbe9d53a6978de4402620ab407Cc4F5532a14C8",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x4302b99057ec2e9dc029884a2bd1ab8abe4963534a70c9118aae8c25e656cc9b",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x4Cbe9d53a6978de4402620ab407Cc4F5532a14C8",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:16:54Z"
+  },
+  {
+    "module": 4,
+    "kind": "vulnerable",
+    "file": "VulnerablePrice.py",
+    "tx_hash": "0x7499677eb2793e08d60604836713369fcbb8fb2883a0f6200080d73d634ca0fd",
+    "address": "0x57201C4b32E65A3c6711c8E3EAb9Dc30C8Ee60bA",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x7499677eb2793e08d60604836713369fcbb8fb2883a0f6200080d73d634ca0fd",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x57201C4b32E65A3c6711c8E3EAb9Dc30C8Ee60bA",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:04:14Z"
+  },
+  {
+    "module": 5,
+    "kind": "patched",
+    "file": "SecureVault.py",
+    "tx_hash": "0xe501f06c786511680e4e3a1bea96bc8ded5776952fbe46d8ba7f801c9fae860b",
+    "address": "0xFb4011A976aa0CB74f2785669B21A399dFBA213B",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0xe501f06c786511680e4e3a1bea96bc8ded5776952fbe46d8ba7f801c9fae860b",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0xFb4011A976aa0CB74f2785669B21A399dFBA213B",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T15:29:43Z"
+  },
+  {
+    "module": 5,
+    "kind": "vulnerable",
+    "file": "VulnerableVault.py",
+    "tx_hash": "0x57fab53bae001d50038b66cfdb79fa369af17b47216fa4ec61aaf661ac7798da",
+    "address": "0xd93287B2adBD34b6aB093B0E4116B9C9C5982927",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x57fab53bae001d50038b66cfdb79fa369af17b47216fa4ec61aaf661ac7798da",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0xd93287B2adBD34b6aB093B0E4116B9C9C5982927",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T15:31:53Z"
+  },
+  {
+    "module": 6,
+    "kind": "patched",
+    "file": "HealthCheckedCrawler.py",
+    "tx_hash": "0x0b5fbab38bd4f4a69f91ada0f876a121498ffffff4881ea823621d2989e48370",
+    "address": "0x151f45DE62A758cf820744CFa8c39ab0bde76178",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x0b5fbab38bd4f4a69f91ada0f876a121498ffffff4881ea823621d2989e48370",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x151f45DE62A758cf820744CFa8c39ab0bde76178",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T17:17:11Z"
+  },
+  {
+    "module": 6,
+    "kind": "vulnerable",
+    "file": "VulnerableCrawler.py",
+    "tx_hash": "0x7e90cccae38c0a80d2a44abe13951a4556f6ccfb0de054bd468b9034887f22e1",
+    "address": "0xDdEDDEfB984f28a8A535a938B2b517351CD3260b",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x7e90cccae38c0a80d2a44abe13951a4556f6ccfb0de054bd468b9034887f22e1",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0xDdEDDEfB984f28a8A535a938B2b517351CD3260b",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T15:31:17Z"
+  },
+  {
+    "module": 7,
+    "kind": "patched",
+    "file": "HardenedPrompt.py",
+    "tx_hash": "0xf62924c4903cad5e2a9f79fc2744304faf80af08752838908c513e994a04537c",
+    "address": "0xa9406C87E6C0EBE67D3991FD830901FFA8bFc45f",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0xf62924c4903cad5e2a9f79fc2744304faf80af08752838908c513e994a04537c",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0xa9406C87E6C0EBE67D3991FD830901FFA8bFc45f",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T20:17:59Z"
+  },
+  {
+    "module": 7,
+    "kind": "vulnerable",
+    "file": "BiasedPrompt.py",
+    "tx_hash": "0xaf3bc34df86d81c6c132514c45ab9a9f5e254635eba4e7b46d839f8e4a5e5f09",
+    "address": "0x6463d8f5335567AE84f65f69587C2c0B781d9C11",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0xaf3bc34df86d81c6c132514c45ab9a9f5e254635eba4e7b46d839f8e4a5e5f09",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x6463d8f5335567AE84f65f69587C2c0B781d9C11",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T15:30:36Z"
+  },
+  {
+    "module": 8,
+    "kind": "patched",
+    "file": "WhitelistedNews.py",
+    "tx_hash": "0x4e0e95b1e013390e02bdf2a9107129ae2ad84b523c5caa26c2326c99e8fdd0ec",
+    "address": "0x7Ad8f28d40eE0760FF3B781b793d4fcac74abF0c",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x4e0e95b1e013390e02bdf2a9107129ae2ad84b523c5caa26c2326c99e8fdd0ec",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x7Ad8f28d40eE0760FF3B781b793d4fcac74abF0c",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T15:30:14Z"
+  },
+  {
+    "module": 8,
+    "kind": "vulnerable",
+    "file": "VulnerableNews.py",
+    "tx_hash": "0x738bea339cac117c61f3a5904ee4a344dac20bb4c685e5d771c6c6e1ab9ced9a",
+    "address": "0x7FB5bBC66e285d74D167Fcd8714c1320274B45b8",
+    "explorer_tx": "https://explorer-bradbury.genlayer.com/tx/0x738bea339cac117c61f3a5904ee4a344dac20bb4c685e5d771c6c6e1ab9ced9a",
+    "explorer_addr": "https://explorer-bradbury.genlayer.com/address/0x7FB5bBC66e285d74D167Fcd8714c1320274B45b8",
+    "execution_result": "FINISHED_WITH_RETURN",
+    "deployed_at": "2026-05-13T15:31:29Z"
+  }
+]
