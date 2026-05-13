@@ -1,0 +1,35 @@
+# Secrets - NEVER commit these
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+.next/
+dist/
+
+# Deployment artifacts are intentionally tracked -- bradbury.json is the
+# public record of which tx hashes / addresses back the docs site.
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+*.tmp
+
+# Development tooling (kept on disk locally, not part of the dApp deliverable)
+impeccable/
