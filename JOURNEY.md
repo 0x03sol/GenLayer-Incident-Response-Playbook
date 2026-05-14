@@ -6,7 +6,7 @@ transaction hash below resolves to a real entry in
 [`deployments/bradbury_calls.json`](deployments/bradbury_calls.json), and every
 explorer link below has been clicked through to verify it loads.
 
-- **Live site**: [https://genlayer-incident-playbook.windsurf.build](https://genlayer-incident-playbook.windsurf.build)
+- **Live site**: [https://gen-layer-incident-response-playboo.vercel.app/](https://gen-layer-incident-response-playboo.vercel.app/)
 - **Repo**: [github.com/0x03sol/GenLayer-Incident-Response-Playbook](https://github.com/0x03sol/GenLayer-Incident-Response-Playbook)
 - **Writeup**: [Medium · Engineering Journey](https://medium.com/@nabilkoman28/genlayer-incident-response-playbook-engineering-journey-dcd62c1e646e)
 - **Author**: [@CijazZamo96896 on X](https://x.com/CijazZamo96896)
