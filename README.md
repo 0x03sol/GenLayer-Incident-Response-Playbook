@@ -6,7 +6,7 @@ Eight failure modes. For each, one vulnerable contract that fails on Bradbury
 testnet and one patched contract that succeeds. Every claim in the docs site
 resolves to a real transaction hash you can click and verify on the explorer.
 
-- **Live site**: <https://genlayer-incident-playbook.windsurf.build>
+- **Live site**: https://gen-layer-incident-response-playboo.vercel.app/
 - **Engineering journey**: [Medium · Engineering Journey](https://medium.com/@nabilkoman28/genlayer-incident-response-playbook-engineering-journey-dcd62c1e646e)
 - **Author**: [@CijazZamo96896 on X](https://x.com/CijazZamo96896)
 - **Network**: Bradbury testnet · chain id `4221` · RPC `https://rpc-bradbury.genlayer.com`
