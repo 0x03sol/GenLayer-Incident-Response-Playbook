@@ -359,4 +359,3 @@ If any of those transactions ever stop resolving, the build will fail before
 the next release ships. That is, in my view, the only kind of documentation
 worth writing for a consensus system.
 
-— *kr863*
