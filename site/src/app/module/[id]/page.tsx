@@ -112,40 +112,29 @@ export default async function ModulePage({ params }: PageProps) {
       </section>
 
       <section style={{ marginBottom: 64 }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "baseline",
-            marginBottom: 20,
-            gap: 24,
-            flexWrap: "wrap",
-          }}
-        >
-          <h2 className="h-section" style={{ margin: 0 }}>
-            Side-by-side · Vulnerable vs. Patched
-          </h2>
-          <div
-            className="mono"
-            style={{
-              fontSize: 11.5,
-              color: "var(--fg-faint)",
-              letterSpacing: "0.05em",
-            }}
-          >
-            two contracts · proven by paired transactions
+        <div className="diff-head">
+          <div className="diff-head-row">
+            <h2 className="h-section" style={{ margin: 0 }}>
+              Side-by-side · Vulnerable vs. Patched
+            </h2>
+            <div className="mono diff-head-cap">
+              two contracts · proven by paired transactions
+            </div>
           </div>
+          <p className="diff-hint">Hover any line to align both panels.</p>
         </div>
         <div className="code-pair">
           <CodeBlock
             code={vulnerableCode}
             filename={mod.vulnerableFileName}
             variant="vulnerable"
+            highlights={mod.vulnerableHighlights}
           />
           <CodeBlock
             code={patchedCode}
             filename={mod.patchedFileName}
             variant="patched"
+            highlights={mod.patchedHighlights}
           />
         </div>
         <CodeDiffOverlay />

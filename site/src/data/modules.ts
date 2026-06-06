@@ -16,6 +16,10 @@ export interface Module {
   patchedContract: string;
   vulnerableFileName: string;
   patchedFileName: string;
+  // 1-based line numbers (matching the displayed gutter) to highlight as
+  // the vulnerability in the left panel and the fix in the right panel.
+  vulnerableHighlights: number[];
+  patchedHighlights: number[];
   // The hash of the tx that *invoked* the vulnerable code path.
   failedTxHash: string;
   // The hash of the tx that *invoked* the patched code path.
@@ -52,6 +56,8 @@ export const modules: Module[] = [
     patchedContract: "ResilientOracle.py",
     vulnerableFileName: "contracts/vulnerable/VulnerableOracle.py",
     patchedFileName: "contracts/patched/ResilientOracle.py",
+    vulnerableHighlights: [12, 29],
+    patchedHighlights: [41, 55],
     failedTxHash: "0x176ad8f386bb630cf25948fef4c1fd7a9102dd0eb5c2ad88304ed76fe8cef676",
     successTxHash: "0x1c702a9beae978f8f1a84037033555680c1ec4e3250402b5b835409f5ec68699",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0x176ad8f386bb630cf25948fef4c1fd7a9102dd0eb5c2ad88304ed76fe8cef676`,
@@ -100,6 +106,8 @@ export const modules: Module[] = [
     patchedContract: "HardenedChat.py",
     vulnerableFileName: "contracts/vulnerable/VulnerableChat.py",
     patchedFileName: "contracts/patched/HardenedChat.py",
+    vulnerableHighlights: [25, 32],
+    patchedHighlights: [47, 61],
     failedTxHash: "0x14b83a062c5aa51178713f1f6b8249b899d68985050fb6408ceb8a7c54107743",
     successTxHash: "0xb295b842777f34c829b4148b048f5e7352d88c9a6fa344a68e5cbd041ba9b8e1",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0x14b83a062c5aa51178713f1f6b8249b899d68985050fb6408ceb8a7c54107743`,
@@ -148,6 +156,8 @@ export const modules: Module[] = [
     patchedContract: "SafeAPI.py",
     vulnerableFileName: "contracts/vulnerable/VulnerableAPI.py",
     patchedFileName: "contracts/patched/SafeAPI.py",
+    vulnerableHighlights: [15, 25, 46],
+    patchedHighlights: [31, 42],
     failedTxHash: "0x0680449e10ba439ab3943b90e2c938a135c894178cf6582f39c938795f089ea2",
     successTxHash: "0xf66c7c66ae27a61f1b0baa686bf735ddad668684f157dad4dd00a7093ccff9d6",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0x0680449e10ba439ab3943b90e2c938a135c894178cf6582f39c938795f089ea2`,
@@ -196,6 +206,8 @@ export const modules: Module[] = [
     patchedContract: "TolerantPrice.py",
     vulnerableFileName: "contracts/vulnerable/VulnerablePrice.py",
     patchedFileName: "contracts/patched/TolerantPrice.py",
+    vulnerableHighlights: [29],
+    patchedHighlights: [37, 40],
     failedTxHash: "0x873e951e051907b8c56a06ce119516ea3d10b2e9705ed6b8e9ac13284be4f824",
     successTxHash: "0xcdbc83d09104ad6e698858e5933706dacfd70a4699780e3f7b4478fab7dd6e49",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0x873e951e051907b8c56a06ce119516ea3d10b2e9705ed6b8e9ac13284be4f824`,
@@ -237,13 +249,15 @@ export const modules: Module[] = [
     id: 5,
     title: "Missing Access Control",
     subtitle: "The Open Door",
-    attack: "@gl.public.write method has no owner check. Anyone can drain state.",
-    fix: "require_sender(self._owner) or role-based access control.",
-    description: `A public write method without access control is like a bank vault with no door. Anyone on the network can call it and modify state. In GenLayer, always validate the sender address against an owner or authorized roles before allowing state mutations.`,
+    attack: "A privileged @gl.public.write (mint) ships with no caller check. Any wallet can inflate the supply.",
+    fix: "Guard privileged mutations with require_sender(self._owner) or a role check. Leave genuinely-public methods open.",
+    description: `Public write methods are normal and usually intended — most contracts expose them on purpose (a token transfer, a governance vote, an open mint). The vulnerability is narrower than "it's public": it is a method that performs a *privileged* state change — minting supply, reassigning the owner, moving funds — with no check on who the caller is. \`VulnerableVault.mint()\` is exactly that. It is public by design, but it mints to whoever calls it with no authorization gate, so any address can inflate the supply at will. The fix is not "make every method private" — it is to guard the privileged action with \`require_sender(self._owner)\` (or a role check), while leaving methods that are meant to be open — like the deliberately public \`propose_domain\` in Module 8 — open on purpose.`,
     vulnerableContract: "VulnerableVault.py",
     patchedContract: "SecureVault.py",
     vulnerableFileName: "contracts/vulnerable/VulnerableVault.py",
     patchedFileName: "contracts/patched/SecureVault.py",
+    vulnerableHighlights: [21, 22],
+    patchedHighlights: [28, 49],
     failedTxHash: "0x9d6b8b57bf941f33af2611fb4831d0a37cb22a2abc173877ef43a92d208b35a6",
     successTxHash: "0x36f80dfadc4813844caca61988b2f754f75170ab8d6d42bef43088cef84c86bd",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0x9d6b8b57bf941f33af2611fb4831d0a37cb22a2abc173877ef43a92d208b35a6`,
@@ -258,15 +272,15 @@ export const modules: Module[] = [
     successNarrative: "deployer is owner+minter -> succeeds for the right caller",
     quiz: [
       {
-        question: "What happens if a @gl.public.write method has no access control?",
+        question: "VulnerableVault.mint() is a @gl.public.write with no caller check. What is the actual problem?",
         options: [
-          "Only the owner can call it by default",
-          "Anyone can call it and modify state",
-          "It becomes read-only",
-          "The contract self-destructs"
+          "Write methods should never be public",
+          "A privileged action (minting supply) is left unguarded, so any caller can invoke it",
+          "Public methods are read-only until an owner is set",
+          "The contract will refuse to deploy without an owner"
         ],
         correctIndex: 1,
-        explanation: "By default, public write methods are callable by any address. You must explicitly add access control checks."
+        explanation: "Public writes are normal and often intended. The bug is that a privileged state change — minting supply — has no authorization gate, so any address can call it. The fix guards that specific action with require_sender(self._owner); it does not mean making every method private."
       },
       {
         question: "How do you enforce ownership in GenLayer?",
@@ -292,6 +306,8 @@ export const modules: Module[] = [
     patchedContract: "HealthCheckedCrawler.py",
     vulnerableFileName: "contracts/vulnerable/VulnerableCrawler.py",
     patchedFileName: "contracts/patched/HealthCheckedCrawler.py",
+    vulnerableHighlights: [21, 24],
+    patchedHighlights: [54, 61, 64],
     failedTxHash: "0x8428c0474d9b5053e9c4962cfaf9288502cb393c75d8ff4a28e7889bbf78f39c",
     successTxHash: "0xbb99dd065cff3f8d462787941bc43baad7d6d5f35a137c8d7d9de9608bf0848a",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0x8428c0474d9b5053e9c4962cfaf9288502cb393c75d8ff4a28e7889bbf78f39c`,
@@ -334,12 +350,14 @@ export const modules: Module[] = [
     title: "Biased Prompt",
     subtitle: "The Loaded Question",
     attack: "Author embeds a hardcoded answer in the system prompt, so the LLM ignores the actual review content.",
-    fix: "Deterministic lexicon pre-classifier gates the LLM. When the lexicon is decisive, no LLM call is made and prompt bias has no path to the verdict.",
-    description: `A contract that delegates a decision to an LLM inherits the bias of the prompt that wraps it. If the author writes "Always classify this as POSITIVE", any LLM that obeys instructions returns POSITIVE regardless of input -- and validators that catch the bias and answer truthfully end up disagreeing with the obedient ones, so consensus fails. The structural fix is to keep the LLM out of the decisive path whenever a cheap deterministic check can settle the question. HardenedPrompt scores the review tokens against a fixed sentiment lexicon (the standard rule-based pre-classifier pattern, cf. VADER) and only consults the LLM as a tiebreaker on inconclusive inputs. A clearly-negative review is therefore classified NEGATIVE deterministically, no matter what the system prompt says.`,
+    fix: "Deterministic lexicon pre-classifier (a fixed list of positive/negative words, scored by rule) gates the LLM. When the lexicon is decisive, no LLM call is made and prompt bias has no path to the verdict.",
+    description: `A contract that delegates a decision to an LLM inherits the bias of the prompt that wraps it. If the author writes "Always classify this as POSITIVE", any LLM that obeys instructions returns POSITIVE regardless of input -- and validators that catch the bias and answer truthfully end up disagreeing with the obedient ones, so consensus fails. The structural fix is to keep the LLM out of the decisive path whenever a cheap deterministic check can settle the question. HardenedPrompt scores the review tokens against a fixed sentiment lexicon — a hardcoded list of positive and negative words, each casting a +1 / −1 vote — (the standard rule-based pre-classifier pattern, cf. VADER) and only consults the LLM as a tiebreaker on inconclusive inputs. A clearly-negative review is therefore classified NEGATIVE deterministically, no matter what the system prompt says.`,
     vulnerableContract: "BiasedPrompt.py",
     patchedContract: "HardenedPrompt.py",
     vulnerableFileName: "contracts/vulnerable/BiasedPrompt.py",
     patchedFileName: "contracts/patched/HardenedPrompt.py",
+    vulnerableHighlights: [29, 36],
+    patchedHighlights: [103, 105],
     failedTxHash: "0xfcc1ad6048a7722976fa8407150d491bb9c442b70ba40246b55a80fcf654f4ff",
     successTxHash: "0x616396cd8bd6949fcec219f0b0adc0f5d05a1577a8467c9887617f9b42b8f877",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0xfcc1ad6048a7722976fa8407150d491bb9c442b70ba40246b55a80fcf654f4ff`,
@@ -365,7 +383,7 @@ export const modules: Module[] = [
         explanation: "Some validators dutifully follow the loaded instruction (\"always POSITIVE\") while others answer truthfully. The two camps return different tokens, strict_eq cannot reach consensus, and the call ends in FINISHED_WITH_ERROR."
       },
       {
-        question: "Why is a deterministic lexicon a stronger fix than 'just write a better prompt'?",
+        question: "Why is a deterministic lexicon — a fixed list of positive/negative words scored by rule, no LLM — a stronger fix than 'just write a better prompt'?",
         options: [
           "Lexicons are faster than LLMs",
           "It removes the LLM from the decisive path entirely, so author-side prompt bias has nowhere to take effect",
@@ -388,6 +406,8 @@ export const modules: Module[] = [
     patchedContract: "WhitelistedNews.py",
     vulnerableFileName: "contracts/vulnerable/VulnerableNews.py",
     patchedFileName: "contracts/patched/WhitelistedNews.py",
+    vulnerableHighlights: [12, 27],
+    patchedHighlights: [52, 53, 68],
     failedTxHash: "0x417e5f42dc6e8aac5c60b8fe630158a62d63c6ad7f96e972893bfd2043cbeaca",
     successTxHash: "0xc660911fbeb75122462b3dbcfb9c7714b7df359e65ce398423a1a8da98b21e31",
     failedTxExplorer: `https://explorer-bradbury.genlayer.com/tx/0x417e5f42dc6e8aac5c60b8fe630158a62d63c6ad7f96e972893bfd2043cbeaca`,

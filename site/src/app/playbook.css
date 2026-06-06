@@ -695,10 +695,12 @@ hr.rule {
 .code-panel .tok-cls { color: #d6d6d6; }
 .code-panel .tok-self { color: #a0a0a0; } /* aligned with new --fg-mute, 7.0:1 */
 .code-panel .line.hl {
-  background: linear-gradient(90deg, rgba(248,113,113,0.10), transparent 70%);
-  border-left: 2px solid var(--red);
-  margin-left: -2px;
-  padding-left: 8px;
+  background: linear-gradient(90deg, rgba(248,113,113,0.16), rgba(248,113,113,0.04) 65%, transparent);
+  box-shadow: inset 3px 0 0 0 var(--red);
+}
+.code-panel .ln.hl {
+  color: var(--red);
+  font-weight: 600;
 }
 /* ---------- code-pair: synchronized scanline + consensus typewriter
    ---------- (overdrive A: cinematic arrival moment, runs once)        */
@@ -847,10 +849,70 @@ hr.rule {
 }
 
 .code-panel .line.hl-ok {
-  background: linear-gradient(90deg, rgba(74,222,128,0.08), transparent 70%);
-  border-left: 2px solid var(--green);
-  margin-left: -2px;
-  padding-left: 8px;
+  background: linear-gradient(90deg, rgba(74,222,128,0.14), rgba(74,222,128,0.03) 65%, transparent);
+  box-shadow: inset 3px 0 0 0 var(--green);
+}
+.code-panel .ln.hl-ok {
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ---------- side-by-side heading + hint ---------- */
+.diff-head {
+  margin-bottom: 20px;
+}
+.diff-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.diff-head-cap {
+  font-size: 11.5px;
+  color: var(--fg-faint);
+  letter-spacing: 0.05em;
+}
+.diff-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-mute);
+}
+
+/* ---------- in-panel highlight label (clear text, one per panel) ----------
+   Sits in each panel's header stack and names what the red/green lines mean:
+   "the vulnerability" in the Failed panel, "the fix" in the Success panel. */
+.code-panel .hl-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--hair);
+  background: var(--surface-2);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.code-panel .hl-note-swatch {
+  width: 18px;
+  height: 10px;
+  border-radius: 1px;
+  flex: none;
+}
+.code-panel[data-variant="vulnerable"] .hl-note {
+  color: var(--red);
+}
+.code-panel[data-variant="vulnerable"] .hl-note-swatch {
+  background: rgba(248, 113, 113, 0.20);
+  box-shadow: inset 3px 0 0 0 var(--red);
+}
+.code-panel[data-variant="patched"] .hl-note {
+  color: var(--green);
+}
+.code-panel[data-variant="patched"] .hl-note-swatch {
+  background: rgba(74, 222, 128, 0.18);
+  box-shadow: inset 3px 0 0 0 var(--green);
 }
 
 .tx-row {
