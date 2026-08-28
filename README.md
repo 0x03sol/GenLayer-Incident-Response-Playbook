@@ -8,7 +8,7 @@ resolves to a real transaction hash you can click and verify on the explorer.
 
 - **Live site**: https://gen-layer-incident-response-playboo.vercel.app/
 - **Engineering journey**: [Medium · Engineering Journey](https://medium.com/@nabilkoman28/genlayer-incident-response-playbook-engineering-journey-dcd62c1e646e)
-- **Author**: [@CijazZamo96896 on X](https://x.com/CijazZamo96896)
+- **Author**: [0x03sol on GitHub](https://github.com/0x03sol)
 - **Network**: Bradbury testnet · chain id `4221` · RPC `https://rpc-bradbury.genlayer.com`
 - **License**: MIT — see [LICENSE](LICENSE)
 
